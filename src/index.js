@@ -1,6 +1,7 @@
 const express = require("express")
 // const bodyParser = require('body-parser')
-const router = require('../router/seller.js')
+const sellerRouter = require('../router/seller.js')
+const userInputRouter = require('../controller/userInputController.js')
 const app = express()
 const port = 3000
 
@@ -8,7 +9,8 @@ const port = 3000
 app.use(express.json())
 
 // use specific route handler
-app.use("/seller", router)
+app.use('/seller', sellerRouter)
+app.use('/user_input', userInputRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello yoi mamen')
