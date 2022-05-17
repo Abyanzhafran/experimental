@@ -19,7 +19,6 @@ const addSeller = (req, res) => {
 
   const id = uuidv4()
   const insertedAt = new Date().toISOString()
-  const updatedAt = insertedAt
   const priceRange = 10000
 
   const newSeller = {
@@ -33,7 +32,6 @@ const addSeller = (req, res) => {
     email,
     priceRange,
     insertedAt,
-    updatedAt
   }
 
   sellers.push(newSeller)

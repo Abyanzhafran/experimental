@@ -23,8 +23,6 @@ router.get('/', getAllSellers)
 
 router.get('/:id', getSellerById)
 
-router.get('/:id', getSellerById)
-
 router.put('/:id', editSellerById)
 
 router.delete('/:id', deleteSellerById)
