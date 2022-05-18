@@ -1,12 +1,12 @@
 const express = require("express")
-const bodyParser = require('body-parser')
+const cors = require('cors')
 const app = express()
 const port = 3000
 const sellerRouter = require('../router/seller.js')
 const userRouter = require('../router/user')
 
-app.use(bodyParser.json())
 app.use(express.json())
+app.use(cors())
 
 // use specific route handler
 app.use('/seller', sellerRouter)

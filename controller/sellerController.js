@@ -56,6 +56,8 @@ const getAllSellers = (req, res) => {
   if (sellers !== undefined) {
     res.status(200).send(sellers)
   }
+
+  res.send('Cannot get seller')
 }
 
 const getSellerById = (req, res, h) => {
@@ -108,7 +110,7 @@ const editSellerById = (req, res) => {
     res.status(200)
     res.send({
       status: 'success',
-      message: 'Seller successfully updated',
+      message: 'Seller successfully updated'
     })
   }
 
