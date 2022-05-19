@@ -9,7 +9,10 @@ const getSellerTest = (req, res) => {
 const addSeller = (req, res) => {
   const {
     shopName,
-    address,
+    province,
+    city,
+    streetName,
+    detailStreet,
     skill,
     sellerPhoto,
     sellerName,
@@ -24,7 +27,10 @@ const addSeller = (req, res) => {
   const newSeller = {
     id,
     shopName,
-    address,
+    province,
+    city,
+    streetName,
+    detailStreet,
     skill,
     sellerPhoto,
     sellerName,
@@ -81,7 +87,10 @@ const editSellerById = (req, res) => {
 
   const {
     shopName,
-    address,
+    province,
+    city,
+    streetName,
+    detailStreet,
     skill,
     sellerPhoto,
     sellerName,
@@ -97,7 +106,10 @@ const editSellerById = (req, res) => {
     sellers[index] = {
       ...sellers[index],
       shopName,
-      address,
+      province,
+      city,
+      streetName,
+      detailStreet,
       skill,
       sellerPhoto,
       sellerName,
@@ -151,3 +163,17 @@ module.exports = {
   editSellerById,
   deleteSellerById
 }
+
+// data request example
+// {
+//   "shopName": "brian_bag",
+//   "province": "jateng",
+//   "city": "solo",
+//   "streetName": "jl. nanas",
+//   "detailStreet": "Blok M",
+//   "skill": "njait",
+//   "sellerPhoto": "asdas/dasd",
+//   "sellerName": "yogi",
+//   "phoneNumber": 123123,
+//   "email": "boy@gmail.com"
+// }
