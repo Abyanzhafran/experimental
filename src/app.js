@@ -1,9 +1,11 @@
 const express = require("express")
 const cors = require('cors')
 const app = express()
+// const bodyParser = require('body-parser')
 const port = 3000
-const sellerRouter = require('../router/seller.js')
+const sellerRouter = require('../router/seller')
 const userRouter = require('../router/user')
+const searchRouter = require('../router/search')
 
 app.use(express.json())
 app.use(cors())
@@ -11,6 +13,7 @@ app.use(cors())
 // use specific route handler
 app.use('/seller', sellerRouter)
 app.use('/user', userRouter)
+app.use('/search', searchRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello yoi mamen')
