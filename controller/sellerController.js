@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 
-var sellers = []
+const sellers = []
 
 const getSellerTest = (req, res) => {
   res.send('this is seller controller')
@@ -72,7 +72,7 @@ const getSellerById = (req, res, h) => {
   if (seller == undefined) {
     res.status(404)
     res.send({
-      status: 'success',
+      status: 'fail',
       message: 'Seller not found'
     })
   }
@@ -147,7 +147,7 @@ const deleteSellerById = (req, res) => {
   res.status(404)
   res.send({
     status: 'fail',
-    message: 'Seller failed to delete, id not found'
+    message: 'failed to delete seller, id not found'
   })
 }
 
@@ -159,17 +159,3 @@ module.exports = {
   editSellerById,
   deleteSellerById
 }
-
-// data request example
-// {
-//   "shopName": "brian_bag",
-//   "province": "jateng",
-//   "city": "solo",
-//   "streetName": "jl. nanas",
-//   "detailStreet": "Blok M",
-//   "skill": "njait",
-//   "sellerPhoto": "asdas/dasd",
-//   "sellerName": "yogi",
-//   "phoneNumber": 123123,
-//   "email": "boy@gmail.com"
-// }
