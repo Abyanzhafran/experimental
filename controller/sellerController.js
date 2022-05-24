@@ -18,6 +18,8 @@ const addSeller = (req, res) => {
     sellerName,
     phoneNumber,
     email,
+    latitude,
+    longtitude
   } = req.body
 
   const id = uuidv4()
@@ -36,6 +38,8 @@ const addSeller = (req, res) => {
     phoneNumber,
     email,
     insertedAt,
+    latitude,
+    longtitude
   }
 
   sellers.push(newSeller)
@@ -94,6 +98,8 @@ const editSellerById = (req, res) => {
     sellerName,
     phoneNumber,
     email,
+    latitude,
+    longtitude
   } = req.body
 
   const updatedAt = new Date().toISOString()
@@ -112,7 +118,9 @@ const editSellerById = (req, res) => {
       sellerName,
       phoneNumber,
       email,
-      updatedAt
+      updatedAt,
+      latitude,
+      longtitude
     }
 
     res.status(200)

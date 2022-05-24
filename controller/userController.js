@@ -35,7 +35,9 @@ const addUser = (req, res) => {
     dateOfBirth,
     phoneNumber,
     email,
-    photoProfile
+    photoProfile,
+    latitude,
+    longtitude
   } = req.body
 
   const id = uuidv4()
@@ -52,6 +54,8 @@ const addUser = (req, res) => {
     email,
     photoProfile,
     insertedAt,
+    latitude,
+    longtitude
   }
 
   users.push(newUser)
@@ -107,7 +111,9 @@ const editUserById = (req, res) => {
     dateOfBirth,
     phoneNumber,
     email,
-    photoProfile
+    photoProfile,
+    latitude,
+    longtitude
   } = req.body
 
   const updatedAt = new Date().toISOString()
@@ -124,7 +130,9 @@ const editUserById = (req, res) => {
       phoneNumber,
       email,
       photoProfile,
-      updatedAt
+      updatedAt,
+      latitude,
+      longtitude
     }
 
     res.status(200)
