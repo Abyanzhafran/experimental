@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const {
+  auth,
   addUser,
   getAllUsers,
   getUserById,
@@ -11,7 +12,7 @@ const {
 // users routing
 router.post('/', addUser)
 
-// router.get('/auth/:uname', auth)
+router.get('/auth/:username/:password', auth)
 
 router.get('/', getAllUsers)
 

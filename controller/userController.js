@@ -6,12 +6,25 @@ const getUserTest = (req, res) => {
   res.send('this is user controller')
 }
 
-// const auth = (req, res) => {
-//   const { uname } = req.params
-//   console.log(uname)
-//   const userAvail = users.find(x => x.username === 'bambang123')
-//   console.log(userAvail)
-// }
+const auth = (req, res) => {
+  const { username, password } = req.params
+  console.log(username + " " + password)
+  const isName = users.map(x => x.username.includes(username))
+  const isPass = users.map(x => x.password.includes(password))
+  if (isName.includes(true) == true && isPass.includes(true) == true) {
+    res.status(200)
+    res.send({
+      status: 'success',
+      message: 'Login successfully'
+    })
+  } else {
+    res.status(404)
+    res.send({
+      status: 'fail',
+      message: 'User not found'
+    })
+  }
+}
 
 const addUser = (req, res) => {
   const {
@@ -146,6 +159,7 @@ const deleteUserById = (req, res) => {
 module.exports = {
   getUserTest,
   addUser,
+  auth,
   getAllUsers,
   getUserById,
   editUserById,
