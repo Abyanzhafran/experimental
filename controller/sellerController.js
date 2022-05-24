@@ -22,7 +22,6 @@ const addSeller = (req, res) => {
 
   const id = uuidv4()
   const insertedAt = new Date().toISOString()
-  const priceRange = 10000
 
   const newSeller = {
     id,
@@ -36,7 +35,6 @@ const addSeller = (req, res) => {
     sellerName,
     phoneNumber,
     email,
-    priceRange,
     insertedAt,
   }
 
@@ -100,7 +98,6 @@ const editSellerById = (req, res) => {
 
   const updatedAt = new Date().toISOString()
   const index = sellers.findIndex(seller => seller.id === id)
-  const priceRange = 10000
 
   if (index !== -1) {
     sellers[index] = {
@@ -115,7 +112,6 @@ const editSellerById = (req, res) => {
       sellerName,
       phoneNumber,
       email,
-      priceRange,
       updatedAt
     }
 
