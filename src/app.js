@@ -1,13 +1,13 @@
 const express = require("express")
 const cors = require('cors')
 const app = express()
-// const bodyParser = require('body-parser')
 const port = 3000
 const sellerRouter = require('../router/seller')
 const userRouter = require('../router/user')
 const searchRouter = require('../router/search')
 const productRouter = require('../router/product')
 
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
