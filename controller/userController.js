@@ -13,9 +13,10 @@ const auth = (req, res) => {
   const isPass = users.map(x => x.password.includes(password))
   if (isName.includes(true) == true && isPass.includes(true) == true) {
     res.status(200)
+    const loginResult = users.find(x => x.username === username)
     res.send({
       status: 'success',
-      message: 'Login successfully'
+      loginResult
     })
   } else {
     res.status(404)
