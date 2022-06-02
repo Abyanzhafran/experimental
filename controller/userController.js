@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const db = require('../database')
 
 const users = []
 
@@ -54,16 +55,21 @@ const addUser = (req, res) => {
     phoneNumber,
     email,
     photoProfile,
-    insertedAt,
     latitude,
-    longtitude
+    longtitude,
+    insertedAt
   }
 
   users.push(newUser)
 
   const isSuccess = users.filter((user) => user.id === id).length > 0
+  const getObjVal = Object.values(newUser)
 
   if (isSuccess) {
+    let query = "INSERT INTO tbl_user (id, fullName, username, password, gender, dateOfBirth, phoneNumber, email, photoProfile, latitude, longtitude, insertedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    db.query(query, getObjVal, (err) => {
+      if (err) throw err;
+    })
     res.status(200)
     res.send({
       status: 'success',
