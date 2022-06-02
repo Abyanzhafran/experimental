@@ -1,31 +1,29 @@
 const { v4: uuidv4 } = require('uuid');
 const db = require('../database')
 
-const users = []
-
 const getUserTest = (req, res) => {
   res.send('this is user controller')
 }
 
 const auth = (req, res) => {
   const { username, password } = req.params
-  console.log(username + " " + password)
-  const isName = users.map(x => x.username.includes(username))
-  const isPass = users.map(x => x.password.includes(password))
-  if (isName.includes(true) == true && isPass.includes(true) == true) {
-    res.status(200)
-    const loginResult = users.find(x => x.username === username)
-    res.send({
+
+  let query = "SELECT id, username, password FROM tbl_user WHERE username = ? AND password = ?"
+  db.query(query, [username, password], (err, result) => {
+    if (err) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'User not found'
+      })
+      throw err
+    }
+    res.status(200).send({
       status: 'success',
-      loginResult
+      loginResult: {
+        userId: result
+      }
     })
-  } else {
-    res.status(404)
-    res.send({
-      status: 'fail',
-      message: 'User not found'
-    })
-  }
+  })
 }
 
 const addUser = (req, res) => {
@@ -60,16 +58,14 @@ const addUser = (req, res) => {
     insertedAt
   }
 
-  users.push(newUser)
-
-  const isSuccess = users.filter((user) => user.id === id).length > 0
   const getObjVal = Object.values(newUser)
 
-  if (isSuccess) {
-    let query = "INSERT INTO tbl_user (id, fullName, username, password, gender, dateOfBirth, phoneNumber, email, photoProfile, latitude, longtitude, insertedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    db.query(query, getObjVal, (err) => {
-      if (err) throw err;
-    })
+  let query = "INSERT INTO tbl_user (id, fullName, username, password, gender, dateOfBirth, phoneNumber, email, photoProfile, latitude, longtitude, insertedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  db.query(query, getObjVal, (err) => {
+    if (err) {
+      res.status(201).send('User failed to add')
+      throw err
+    }
     res.status(200)
     res.send({
       status: 'success',
@@ -78,33 +74,34 @@ const addUser = (req, res) => {
         userId: newUser.id
       }
     })
-  }
-
-  res.status(201).send('User failed to add')
+  })
 }
 
 const getAllUsers = (req, res) => {
-  if (users !== undefined) {
-    res.status(200).send(users)
-  }
-
-  res.send('Cannot get user')
+  let query = "SELECT * FROM tbl_user"
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send('Cannot get users')
+      throw err
+    }
+    res.status(200).send(result)
+  })
 }
 
 const getUserById = (req, res) => {
   const { id } = req.params
 
-  const user = users.filter(x => x.id === id)[0]
-
-  if (user == undefined) {
-    res.status(404)
-    res.send({
-      status: 'fail',
-      message: 'User not found'
-    })
-  }
-
-  res.status(200).send(user)
+  let query = "SELECT * FROM tbl_user WHERE id = ?"
+  db.query(query, [id], (err, result) => {
+    if (result.length == 0) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'User not found'
+      })
+    } else if (!err && result.length !== 0) {
+      res.status(200).send(result)
+    }
+  })
 }
 
 const editUserById = (req, res) => {
@@ -124,50 +121,54 @@ const editUserById = (req, res) => {
   } = req.body
 
   const updatedAt = new Date().toISOString()
-  const index = users.findIndex(user => user.id === id)
 
-  if (index !== -1) {
-    users[index] = {
-      ...users[index],
-      fullName,
-      username,
-      password,
-      gender,
-      dateOfBirth,
-      phoneNumber,
-      email,
-      photoProfile,
-      updatedAt,
-      latitude,
-      longtitude
+  let query = "UPDATE tbl_user SET fullName = ?, username = ?, password = ?, gender = ?, dateOfBirth = ?, phoneNumber = ?, email = ?, photoProfile = ?, latitude = ?, longtitude = ?, updatedAt = ? WHERE id = ?"
+  db.query(query, [
+    fullName,
+    username,
+    password,
+    gender,
+    dateOfBirth,
+    phoneNumber,
+    email,
+    photoProfile,
+    latitude,
+    longtitude,
+    updatedAt,
+    id
+  ], (err, result) => {
+    if (err) {
+      res.status(404)
+      res.send({
+        status: 'fail',
+        message: 'User not found'
+      })
+      throw err
     }
-
     res.status(200)
     res.send({
       status: 'success',
       message: 'User successfully updated'
     })
-  }
+  })
 }
 
 const deleteUserById = (req, res) => {
   const { id } = req.params
 
-  const index = users.findIndex(seller => seller.id === id)
-
-  if (index !== -1) {
-    users.splice(index, 1)
-    res.status(200)
-    res.send({
+  let query = "DELETE FROM tbl_user WHERE id = ?"
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'Users failed to delete, id not found'
+      })
+      throw err
+    }
+    res.status(200).send({
       status: 'success',
       message: 'Users successfully deleted'
     })
-  }
-
-  res.status(404)
-  res.send({
-    status: 'fail',
-    message: 'Users failed to delete, id not found'
   })
 }
 
