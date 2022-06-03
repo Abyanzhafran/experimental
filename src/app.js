@@ -7,7 +7,10 @@ const searchRouter = require('../router/search')
 const productRouter = require('../router/product')
 const testRouter = require('../router/test')
 
+// enable middleware
 app.use(express.json())
+
+// enable cors
 app.use(cors())
 
 // use specific route handler

@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const db = require('../database')
 
 const sellers = []
 
@@ -42,11 +43,14 @@ const addSeller = (req, res) => {
     longtitude
   }
 
-  sellers.push(newSeller)
+  const getObjVal = Object.values(newSeller)
 
-  const isSuccess = sellers.filter((seller) => seller.id === id).length > 0
-
-  if (isSuccess) {
+  let query = "INSERT INTO tbl_seller (id, shopName, province, city, streetName, detailStreet, skill, sellerPhoto, sellerName, phoneNumber, email, insertedAt, latitude, longtitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+  db.query(query, getObjVal, (err) => {
+    if (err) {
+      res.status(201).send('Seller failed to add')
+      throw err
+    }
     res.status(200)
     res.send({
       status: 'success',
@@ -55,9 +59,7 @@ const addSeller = (req, res) => {
         sellerId: newSeller.id
       }
     })
-  }
-
-  res.status(201).send('Seller failed to add')
+  })
 }
 
 const getAllSellers = (req, res) => {
@@ -136,7 +138,6 @@ const editSellerById = (req, res) => {
     message: 'Failed to update seller, id not found'
   })
 }
-
 
 const deleteSellerById = (req, res) => {
   const { id } = req.params
