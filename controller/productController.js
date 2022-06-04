@@ -1,6 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-
-const products = []
+const db = require('../database')
 
 const getProductTest = (req, res) => {
   res.send('this is product controller')
@@ -11,10 +10,8 @@ const addProduct = (req, res) => {
     productPhoto,
     name,
     definition,
-    priceRange: {
-      price_1,
-      price_2
-    }
+    price_1,
+    price_2
   } = req.body
 
   const id = uuidv4()
@@ -25,51 +22,54 @@ const addProduct = (req, res) => {
     productPhoto,
     name,
     definition,
-    priceRange: {
-      price_1,
-      price_2
-    },
+    price_1,
+    price_2,
     insertedAt
   }
 
-  products.push(newProduct)
+  const getObjVal = Object.values(newProduct)
 
-  const isSuccess = products.length > 0
-
-  if (isSuccess) {
-    res.status(200)
-    res.send({
+  let query = "INSERT INTO tbl_product (id, productPhoto, name, definition, price_1, price_2, insertedAt) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  db.query(query, getObjVal, (err) => {
+    if (err) {
+      res.status(201).send('Product failed to add')
+      throw err
+    }
+    res.status(200).send({
       status: 'success',
       message: 'Product added successfully',
       data: {
         productId: newProduct.id
       }
     })
-  }
+  })
 }
 
 const getAllProduct = (req, res) => {
-  if (products !== undefined) {
-    res.status(200).send(products)
-  }
-
-  res.send('Cannot get products')
+  let query = "SELECT * FROM tbl_product"
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send('Cannot get products')
+      throw err
+    }
+    res.status(200).send(result)
+  })
 }
 
 const getProductById = (req, res) => {
   const { id } = req.params
 
-  const product = products.filter(x => x.id === id)[0]
-
-  if (product == undefined) {
-    res.status(404)
-    res.send({
-      status: 'fail',
-      message: 'Product not found'
-    })
-  }
-
-  res.status(200).send(product)
+  let query = "SELECT * FROM tbl_product WHERE id = ?"
+  db.query(query, [id], (err, result) => {
+    if (result.length == 0) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'Product not found'
+      })
+    } else if (!err && result.length !== 0) {
+      res.status(200).send(result)
+    }
+  })
 }
 
 const editProductById = (req, res) => {
@@ -79,60 +79,54 @@ const editProductById = (req, res) => {
     productPhoto,
     name,
     definition,
-    priceRange: {
-      price_1,
-      price_2
-    }
+    price_1,
+    price_2
   } = req.body
 
   const updatedAt = new Date().toISOString()
-  const index = products.findIndex(product => product.id === id)
 
-  if (index !== -1) {
-    products[index] = {
-      ...products[index],
-      productPhoto,
-      name,
-      definition,
-      priceRange: {
-        price_1,
-        price_2
-      },
-      updatedAt
+  let query = "UPDATE tbl_product SET productPhoto = ?, name = ?, definition = ?, price_1 = ?, price_2 = ?, updatedAt = ? WHERE id = ?"
+  db.query(query, [
+    productPhoto,
+    name,
+    definition,
+    price_1,
+    price_2,
+    updatedAt,
+    id
+  ], (err, result) => {
+    if (err) {
+      res.status(404)
+      res.send({
+        status: 'fail',
+        message: 'Failed to update product, id not found'
+      })
+      throw err
     }
-
     res.status(200)
     res.send({
       status: 'success',
       message: 'Product successfully updated'
     })
-  }
-
-  res.status(404)
-  res.send({
-    status: 'fail',
-    message: 'Failed to update product, id not found'
   })
 }
 
 const deleteProductById = (req, res) => {
   const { id } = req.params
 
-  const index = products.findIndex(x => x.id === id)
-
-  if (index !== -1) {
-    products.splice(index, 1)
-    res.status(200)
-    res.send({
+  let query = "DELETE FROM tbl_product WHERE id = ?"
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'Product failed to delete, id not found'
+      })
+      throw err
+    }
+    res.status(200).send({
       status: 'success',
       message: 'Product successfully deleted'
     })
-  }
-
-  res.status(404)
-  res.send({
-    status: 'fail',
-    message: 'Product failed to delete, product not found'
   })
 }
 
