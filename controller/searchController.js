@@ -1,80 +1,26 @@
-const data = [
-  {
-    product: 'Celana',
-    shopName: 'brianbag'
-  },
-  {
-    product: 'Jaket',
-    shopName: 'brayyanJacket'
-  },
-  {
-    product: 'Dress',
-    shopName: 'dressin'
-  }
-]
+const db = require('../database')
 
-const resCategory = []
-
-const getSearchTest = (req, res) => {
-  res.send('this is search controller')
+const searchTest = (req, res) => {
+  res.send('this is search test new')
 }
 
 const getSearch = (req, res) => {
-  const { category } = req.body
+  const { category } = req.params
 
-  if (category == 'product') {
-    // res.send('this is product search')
-    defCategory(category)
-  } else if (category == 'shopName') {
-    // res.send('this is shopName search')
-    defCategory(category)
-  } else (
-    // console.log('your category not found')
-    res.send('your category not found')
-  )
+  let query = "SELECT * FROM tbl_product WHERE category = ?"
+  db.query(query, [category], (err, result) => {
+    if (err) {
+      res.status(404).send('Cannot get data')
+      throw err
+    }
+    res.status(200).send({
+      status: 'success',
+      sellers: result
+    })
+  })
 }
-
-// stuck here
-const defCategory = (category, req, res) => {
-  if (category == 'product') {
-    console.log('this is product search')
-    // console.log(category)
-    // if (resCategory.length == 1) {
-    //   resCategory.pop()
-    // }
-    // resCategory.push(category)
-    // console.log(resCategory, resCategory.length)
-  }
-  // if (category == 'shopName') {
-  //   // console.log('this is shopName search')
-  //   // console.log(category)
-  //   // if (resCategory.length == 1) {
-  //   //   resCategory.pop()
-  //   // }
-  //   // resCategory.push(category)
-  //   // console.log(resCategory, resCategory.length)
-  // }
-}
-
-
-// const findData = (req, res) => {
-//   const { prodSearch } = req.body
-//   const check = data.find(({ product }) => product === prodSearch)
-//   console.log(check)
-// }
-
-// const searchNow = (req, res) => {
-//   if (resCategory[0] == 'product') {
-//     const { product } = req.body
-//     const newSearch = { product }
-//   } else if (resCategory[0] == 'shopName') {
-//     const { shopName } = req.body
-//     const newSearch = { shopName }
-//   }
-// }
-
 
 module.exports = {
-  getSearchTest,
+  searchTest,
   getSearch
 }
