@@ -8,7 +8,7 @@ const getUserTest = (req, res) => {
 
 const auth = (req, res) => {
   const { username, password } = req.params
-  console.log(username + " " + password)
+  // console.log(username + " " + password)
   const isName = users.map(x => x.username.includes(username))
   const isPass = users.map(x => x.password.includes(password))
   if (isName.includes(true) == true && isPass.includes(true) == true) {
@@ -79,7 +79,10 @@ const addUser = (req, res) => {
 
 const getAllUsers = (req, res) => {
   if (users !== undefined) {
-    res.status(200).send(users)
+    res.status(200).send({
+      status: 'success',
+      users
+    })
   }
 
   res.send('Cannot get user')

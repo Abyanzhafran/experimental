@@ -11,10 +11,8 @@ const addProduct = (req, res) => {
     productPhoto,
     name,
     definition,
-    priceRange: {
-      price_1,
-      price_2
-    }
+    price_1,
+    price_2,
   } = req.body
 
   const id = uuidv4()
@@ -25,10 +23,8 @@ const addProduct = (req, res) => {
     productPhoto,
     name,
     definition,
-    priceRange: {
-      price_1,
-      price_2
-    },
+    price_1,
+    price_2,
     insertedAt
   }
 
@@ -50,7 +46,10 @@ const addProduct = (req, res) => {
 
 const getAllProduct = (req, res) => {
   if (products !== undefined) {
-    res.status(200).send(products)
+    res.status(200).send({
+      status: 'success',
+      products
+    })
   }
 
   res.send('Cannot get products')
@@ -79,10 +78,8 @@ const editProductById = (req, res) => {
     productPhoto,
     name,
     definition,
-    priceRange: {
-      price_1,
-      price_2
-    }
+    price_1,
+    price_2,
   } = req.body
 
   const updatedAt = new Date().toISOString()
@@ -94,10 +91,8 @@ const editProductById = (req, res) => {
       productPhoto,
       name,
       definition,
-      priceRange: {
-        price_1,
-        price_2
-      },
+      price_1,
+      price_2,
       updatedAt
     }
 

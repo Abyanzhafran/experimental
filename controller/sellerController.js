@@ -62,7 +62,10 @@ const addSeller = (req, res) => {
 
 const getAllSellers = (req, res) => {
   if (sellers !== undefined) {
-    res.status(200).send(sellers)
+    res.status(200).send({
+      status: 'success',
+      sellers
+    })
   }
 
   res.send('Cannot get seller')
