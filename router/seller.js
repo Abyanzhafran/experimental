@@ -21,10 +21,10 @@ router.post('/', addSeller)
 
 router.get('/', getAllSellers)
 
-router.get('/:userId', getSellerById)
+router.get('/:id', getSellerById)
 
-router.put('/:userId', editSellerById)
+router.put('/:id', editSellerById)
 
-router.delete('/:userId', deleteSellerById)
+router.delete('/:id', deleteSellerById)
 
 module.exports = router
