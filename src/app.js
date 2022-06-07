@@ -6,6 +6,7 @@ const userRouter = require('../router/user')
 const searchRouter = require('../router/search')
 const productRouter = require('../router/product')
 const testRouter = require('../router/test')
+const transactionRouter = require('../router/transaction')
 
 // enable middleware
 app.use(express.json())
@@ -19,6 +20,7 @@ app.use('/user', userRouter)
 app.use('/search', searchRouter)
 app.use('/product', productRouter)
 app.use('/test', testRouter)
+app.use('/transaction', transactionRouter)
 
 
 app.get('/', (req, res) => {
