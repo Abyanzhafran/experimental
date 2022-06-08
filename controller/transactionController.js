@@ -50,7 +50,59 @@ const beginTransaction = (req, res) => {
   })
 }
 
+const getAllTransaction = (req, res) => {
+  let query = "SELECT * FROM tbl_transaction"
+  db.query(query, (err, result) => {
+    if (err) {
+      res.status(404).send('Cannot get transactions')
+      throw err
+    }
+    res.status(200).send({
+      status: 'success',
+      transactions: result
+    })
+  })
+}
+
+const getTransactionById = (req, res) => {
+  const { idTransaction } = req.params
+
+  let query = "SELECT * FROM tbl_transaction WHERE idTransaction = ?"
+  db.query(query, [idTransaction], (err, result) => {
+    if (result.length == 0) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'idTransaction not found'
+      })
+    } else if (!err && result.length !== 0) {
+      res.status(200).send(result)
+    }
+  })
+}
+
+const deleteTransactionById = (req, res) => {
+  const { idTransaction } = req.params
+
+  let query = "DELETE FROM tbl_transaction WHERE idTransaction = ?"
+  db.query(query, [idTransaction], (err, result) => {
+    if (err) {
+      res.status(404).send({
+        status: 'fail',
+        message: 'Transaction to delete, id not found'
+      })
+      throw err
+    }
+    res.status(200).send({
+      status: 'success',
+      message: 'Transaction successfully deleted'
+    })
+  })
+}
+
 module.exports = {
   getTransactionTest,
   beginTransaction,
+  getAllTransaction,
+  getTransactionById,
+  deleteTransactionById
 }
